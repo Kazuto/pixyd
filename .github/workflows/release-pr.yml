@@ -25,7 +25,7 @@ jobs:
         uses: actions/github-script@v9
         with:
           script: |
-            const MAIN = 'master';
+            const MAIN = 'main';
             const DEVELOP = 'develop';
             const SECTIONS = {
               breaking: 'Breaking Changes',
