@@ -1,0 +1,19 @@
+[Unit]
+Description=pixyd: EMEET PIXY webcam control
+Documentation=https://github.com/Kazuto/pixyd
+
+[Service]
+ExecStart=@BINDIR@/pixyd
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=yes
+# No namespace sandboxing (ProtectSystem=, PrivateTmp=, …): in a user unit
+# those need unprivileged user namespaces, which Ubuntu restricts, and the
+# unit would fail to start.
+#
+# To use another port, run `systemctl --user edit pixyd` and add:
+#   [Service]
+#   Environment=PIXYD_PORT=7500
+
+[Install]
+WantedBy=default.target

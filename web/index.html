@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>pixyd</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a8c7fa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z'/%3E%3Ccircle cx='12' cy='13' r='3'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script type="module" src="app.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <svg class="icon icon-lg accent" aria-hidden="true"><use href="icons.svg#camera" /></svg>
+        pixyd
+      </div>
+      <span id="conn" class="chip">Connecting…</span>
+      <span id="device" class="device"></span>
+    </header>
+    <p id="banner" class="banner" role="alert" hidden></p>
+
+    <main class="layout">
+      <section class="panel preview-panel" aria-label="Preview and mode">
+        <div class="preview">
+          <video id="video" autoplay muted playsinline></video>
+          <div id="overlay" class="overlay">
+            <svg id="overlay-icon" class="icon icon-lg" aria-hidden="true"><use href="icons.svg#camera" /></svg>
+            <p id="overlay-text">Starting preview…</p>
+          </div>
+        </div>
+        <div class="preview-bar">
+          <div id="modes" class="segmented" role="group" aria-label="Mode">
+            <button type="button" data-mode="standard" aria-pressed="false">
+              <svg class="icon" aria-hidden="true"><use href="icons.svg#frame" /></svg>Standard
+            </button>
+            <button type="button" data-mode="tracking" aria-pressed="false">
+              <svg class="icon" aria-hidden="true"><use href="icons.svg#scan-face" /></svg>Tracking
+            </button>
+            <button type="button" data-mode="privacy" aria-pressed="false">
+              <svg class="icon" aria-hidden="true"><use href="icons.svg#eye-off" /></svg>Privacy
+            </button>
+          </div>
+          <button id="preview-toggle" type="button" class="btn ghost">
+            <svg class="icon" aria-hidden="true"><use href="icons.svg#pause" /></svg>
+            <span>Pause preview</span>
+          </button>
+        </div>
+        <p id="mode-note" class="note" hidden></p>
+        <div id="ptz" class="ptz" hidden></div>
+      </section>
+
+      <div id="controls-left" class="controls side-left">
+        <section class="panel">
+          <p class="muted">Loading controls…</p>
+        </section>
+      </div>
+      <div id="controls-right" class="controls side-right"></div>
+    </main>
+
+    <div id="toasts" class="toasts" aria-live="polite"></div>
+  </body>
+</html>

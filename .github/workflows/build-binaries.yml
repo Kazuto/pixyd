@@ -1,0 +1,63 @@
+name: Build and Publish Binaries
+
+# Started by release.yml for each new release tag. Run by hand on a tag to rebuild
+# that release's binaries, or on a branch to build them as a workflow artifact.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build binaries
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.26'
+          cache: true
+
+      - name: Build and package
+        run: |
+          if [[ "$GITHUB_REF_TYPE" == tag ]]; then
+            VERSION="$GITHUB_REF_NAME"
+          else
+            VERSION="dev-${GITHUB_SHA::7}"
+          fi
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+          mkdir dist
+          for arch in amd64 arm64; do
+            name="pixyd-$VERSION-linux-$arch"
+            mkdir "$name"
+            GOARCH="$arch" make build VERSION="$VERSION"
+            mv bin/pixyd "$name/pixyd"
+            # The unit expects the binary where `make install` puts it
+            sed 's|@BINDIR@|%h/.local/bin|' deploy/pixyd.service > "$name/pixyd.service"
+            cp LICENSE README.md "$name/"
+            tar -czf "dist/$name.tar.gz" "$name"
+          done
+
+          (cd dist && sha256sum *.tar.gz > SHA256SUMS)
+          cat dist/SHA256SUMS
+
+      - name: Attach to release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: gh release upload "$VERSION" dist/* --clobber
+
+      - name: Upload artifact
+        if: github.ref_type != 'tag'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pixyd-${{ env.VERSION }}
+          path: dist/*
+          retention-days: 7
