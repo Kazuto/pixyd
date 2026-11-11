@@ -3,7 +3,6 @@ name: Release
 on:
   pull_request:
     types: [closed]
-    branches: [master]
 
 permissions:
   actions: write
@@ -11,30 +10,6 @@ permissions:
 
 jobs:
   release:
-    name: Create release
-    if: github.event.pull_request.merged == true && github.event.pull_request.head.ref == 'develop'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Create release and start its build
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
-          TITLE: ${{ github.event.pull_request.title }}
-          NOTES: ${{ github.event.pull_request.body }}
-          TARGET: ${{ github.event.pull_request.merge_commit_sha }}
-        run: |
-          # release-pr.yml titles PRs "Release: vX.Y.Z"; the tag and release are named just "vX.Y.Z"
-          pattern='^(Release:[[:space:]]*)?(v[0-9]+\.[0-9]+\.[0-9]+)$'
-          if [[ ! "$TITLE" =~ $pattern ]]; then
-            echo "::warning::Release PR title is not \"vX.Y.Z\" or \"Release: vX.Y.Z\", so no release was created"
-            exit 0
-          fi
-
-          VERSION="${BASH_REMATCH[2]}"
-
-          gh release create "$VERSION" --target "$TARGET" --title "$VERSION" --notes "$NOTES"
-
-          # A release created with GITHUB_TOKEN doesn't fire other workflows,
-          # but workflow_dispatch is exempt from that rule.
-          gh workflow run build-binaries.yml --ref "$VERSION"
+    uses: Kazuto/actions/.github/workflows/release.yml@v1
+    with:
+      build-workflow: build-binaries.yml
