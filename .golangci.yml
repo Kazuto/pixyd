@@ -1,0 +1,14 @@
+linters:
+  enable:
+    - errorlint
+    - gocritic
+    - misspell
+    - unconvert
+    - usestdlibvars
+
+issues:
+  exclude-rules:
+    # Closing a descriptor that is being dropped anyway, and writing a
+    # response, have no useful error handling.
+    - linters: [errcheck]
+      text: "Error return value of `.*\\.(Close|Write)` is not checked"
