@@ -1,0 +1,604 @@
+/* Theme from wallgrade (~/Projects/wallgrade/app/assets/css/main.css). */
+
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/inter.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("fonts/jetbrains-mono.woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  /* Surfaces from back to front. */
+  --canvas: #111214;
+  --panel: #18191c;
+  --raised: #202226;
+  --line: #2a2c31;
+  --line-strong: #3b3e45;
+
+  --fg: #e6e7e9;
+  --muted: #a2a5ab;
+  --faint: #6f727a;
+
+  --accent: #a8c7fa;
+  --accent-hover: #c1d7fb;
+  --on-accent: #0c1628;
+
+  --success: #8fd19e;
+  --warning: #f2c97d;
+  --danger: #f28b82;
+
+  accent-color: var(--accent);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--canvas);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  -webkit-font-smoothing: antialiased;
+}
+
+p {
+  margin: 0;
+}
+
+button,
+select,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* Icons come from the sprite in icons.svg. */
+.icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon-lg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.accent {
+  color: var(--accent);
+}
+
+/* Header ------------------------------------------------------------ */
+
+.topbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  min-height: 4.5rem;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.device {
+  margin-left: auto;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.banner {
+  padding: 0.5rem 1.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--danger) 30%, transparent);
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+  color: var(--danger);
+}
+
+.banner.warning {
+  border-color: color-mix(in srgb, var(--warning) 30%, transparent);
+  background: color-mix(in srgb, var(--warning) 10%, transparent);
+  color: var(--warning);
+}
+
+/* Chips, like wallgrade's StateChip. */
+.chip {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.125rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 0.375rem;
+  background: var(--raised);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.chip::before {
+  content: "";
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.chip.success {
+  border-color: color-mix(in srgb, var(--success) 30%, transparent);
+  background: color-mix(in srgb, var(--success) 10%, transparent);
+  color: var(--success);
+}
+
+.chip.warning {
+  border-color: color-mix(in srgb, var(--warning) 30%, transparent);
+  background: color-mix(in srgb, var(--warning) 10%, transparent);
+  color: var(--warning);
+}
+
+.chip.danger {
+  border-color: color-mix(in srgb, var(--danger) 30%, transparent);
+  background: color-mix(in srgb, var(--danger) 10%, transparent);
+  color: var(--danger);
+}
+
+/* Layout ------------------------------------------------------------ */
+
+/* Settings | preview | settings. */
+.layout {
+  display: grid;
+  grid-template-columns: minmax(16rem, 1fr) minmax(0, 2fr) minmax(16rem, 1fr);
+  grid-template-areas: "left preview right";
+  align-items: start;
+  gap: 1.25rem;
+  max-width: 112rem;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem;
+}
+
+.preview-panel {
+  grid-area: preview;
+}
+
+.side-left {
+  grid-area: left;
+}
+
+.side-right {
+  grid-area: right;
+}
+
+/* Narrower: the preview on top, both settings columns below it. */
+@media (max-width: 72rem) {
+  .layout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "preview preview"
+      "left right";
+  }
+}
+
+@media (max-width: 48rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "preview"
+      "left"
+      "right";
+    padding: 1rem;
+  }
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--panel) 60%, transparent);
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.panel-head h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.panel-head .icon {
+  color: var(--muted);
+}
+
+.panel-head .btn {
+  margin-left: auto;
+}
+
+/* Preview ----------------------------------------------------------- */
+
+.preview {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: #000;
+}
+
+.preview video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background: color-mix(in srgb, var(--canvas) 85%, transparent);
+  color: var(--muted);
+  text-align: center;
+}
+
+.overlay p {
+  max-width: 32rem;
+}
+
+.overlay.danger {
+  color: var(--danger);
+}
+
+.overlay.warning {
+  color: var(--warning);
+}
+
+.preview-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.note {
+  color: var(--muted);
+}
+
+.note.warning {
+  color: var(--warning);
+}
+
+.note.danger {
+  color: var(--danger);
+}
+
+/* Buttons and fields, like wallgrade's buttonClass and .field. ------- */
+
+.btn {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--panel);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.btn:hover {
+  border-color: var(--line-strong);
+  background: var(--raised);
+}
+
+.btn.ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+.btn.ghost:hover {
+  background: var(--raised);
+  color: var(--fg);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0.375rem;
+  background: transparent;
+  color: var(--faint);
+  cursor: pointer;
+}
+
+.icon-btn .icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.icon-btn:hover {
+  background: var(--raised);
+  color: var(--fg);
+}
+
+.icon-btn:disabled {
+  visibility: hidden;
+}
+
+.link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  cursor: pointer;
+}
+
+.link:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+.field {
+  height: 2.5rem;
+  width: 100%;
+  padding: 0 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  outline: none;
+  background: var(--canvas);
+}
+
+.field:focus {
+  border-color: var(--accent);
+}
+
+/* Segmented control, like wallgrade's SegmentedControl. */
+.segmented {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: var(--panel);
+}
+
+.segmented button {
+  display: inline-flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2rem;
+  padding: 0 0.75rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: transparent;
+  color: color-mix(in srgb, var(--fg) 80%, transparent);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
+}
+
+.segmented button:hover {
+  background: var(--raised);
+  color: var(--fg);
+}
+
+.segmented button.active {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 500;
+}
+
+/* The camera can't confirm the mode (idle): show the best guess as an
+   outline instead of a filled chip. */
+.segmented button.guess {
+  box-shadow: inset 0 0 0 1px var(--accent);
+  color: var(--accent);
+}
+
+.segmented button:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.segmented.compact button {
+  flex: 0 1 auto;
+  height: 1.75rem;
+  padding: 0 0.625rem;
+  font-size: 0.8125rem;
+}
+
+/* Control rows --------------------------------------------------------- */
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.ctl {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+/* Pan, tilt and zoom sit under the preview, side by side. */
+.ptz {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.ptz .rows {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 40rem) {
+  .ptz .rows {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.875rem;
+  }
+}
+
+.ctl.inactive .ctl-label,
+.ctl.inactive .ctl-value,
+.ctl.inactive input[type="range"] {
+  opacity: 0.5;
+}
+
+.ctl-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 1.5rem;
+}
+
+.ctl-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.ctl-value {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+
+.ctl .hint {
+  color: var(--faint);
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+input[type="range"] {
+  width: 100%;
+  height: 0.375rem;
+  margin: 0;
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  margin: 0;
+  cursor: pointer;
+}
+
+input:disabled,
+select:disabled {
+  cursor: default;
+}
+
+/* Toasts -------------------------------------------------------------- */
+
+.toasts {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: min(28rem, calc(100vw - 2rem));
+}
+
+.toast {
+  padding: 0.75rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--danger) 30%, transparent);
+  border-radius: 0.75rem;
+  background: var(--raised);
+  color: var(--danger);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 40%);
+}
